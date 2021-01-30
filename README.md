@@ -13,4 +13,4 @@ https://github.com/Bearcat-Electric-Vehicle/BEV_2021_Teensy_Firmware
 https://www.visualmicro.com/
 
 
-See Teensy IO Map for Current Teensy pinout
+See TeensyIOMap.xlxs for Current Teensy pinout
