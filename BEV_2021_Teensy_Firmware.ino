@@ -9,6 +9,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <Bounce.h>
+#include <Wire.h>
 
 
 
@@ -27,22 +28,23 @@ int spareOut3 = 11;
 int spareOut4 = 12;
 
 //Comm
-int canRX = 23;
-int canTx = 22;
+int canRX = A9;
+int canTx = A8;
 
-int i2cSCL = 19;
-int i2cSDA = 18;
+//set by default in Wire lib
+//int i2cSCL = A5;
+//int i2cSDA = A4;
 
 //io
 
 int Vehicle_PWR = 2;
-int Accel_0 = 24;
-int Accel_1 = 25;
-int Brake_Pos = 26;
-int WheelSense0 = 21;
-int WheelSense1 = 22;
-int WheelSense2 = 23;
-int WheelSense3 = 24;
+int Accel_0 = A10;
+int Accel_1 = A11;
+int Brake_Pos = A12;
+int WheelSense0 = A7;
+int WheelSense1 = A6;
+int WheelSense2 = A3;
+int WheelSense3 = A2;
 int ECU_OK = 15;
 int PreChg_Fin = 14;
 int Ready_TO_GO = 13;
@@ -58,6 +60,8 @@ Bounce Reset_Button = Bounce(RESET_BUTTON, 10);
 
 //time duration for reset button press
 static unsigned long ResetButtonTime = 2000;
+//Pedal pot sensors and throttle out val.
+long Pedal0, Pedal1, ThrottleOut;
 
 //##################################### End Global Variables ###########################################
 
@@ -168,8 +172,8 @@ void setup()
     pinMode(canRX, INPUT);
     pinMode(canTx, OUTPUT);
 
-    pinMode(i2cSCL, OUTPUT);
-    pinMode(i2cSDA, OUTPUT);
+    //pinMode(i2cSCL, OUTPUT);
+    //pinMode(i2cSDA, OUTPUT);
 
     pinMode(Vehicle_PWR, OUTPUT);
     pinMode(Accel_0, INPUT_PULLDOWN);
@@ -192,12 +196,35 @@ void setup()
     
 
     Init();
+
+    //begin i2c
+    Wire.begin();
 }
 
 // Add the main program code into the continuous loop() function
 void loop()
 {
-    //todo: make apps map
+    //read pedal pots
+    Pedal0 = analogRead(Accel_0);
+    Pedal1 = analogRead(Accel_1);
+
+    //if difference between pedal senses are greater than 10% of pedal0, error
+    if (abs(Pedal0 - Pedal1) > (0.1 * Pedal0)) {
+        Error();
+    }
+
+
+    //TODO: add map for pedal percentages
+    ThrottleOut = Pedal0;
+
+    //TODO: pick i2c to analog ic and send output (ThrottleOut) to motor controller
+
+    //set eeprom address to 0
+    //TODO: Change this depending on chip specs
+    Wire.beginTransmission(0x80);
+    Wire.write(ThrottleOut);
+    Wire.endTransmission();
+
 
 }
 
