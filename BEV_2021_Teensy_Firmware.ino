@@ -37,20 +37,21 @@ int canTx = A8;
 
 //io
 
-int Vehicle_PWR = 2;
-int Accel_0 = A10;
-int Accel_1 = A11;
-int Brake_Pos = A12;
-int WheelSense0 = A7;
-int WheelSense1 = A6;
-int WheelSense2 = A3;
-int WheelSense3 = A2;
-int ECU_OK = 15;
-int PreChg_Fin = 14;
-int Ready_TO_GO = 13;
-int SHUTDOWN = 41;
-int Speaker = 37;
-int RESET_BUTTON = 36;
+int Vehicle_PWR = 2; 
+int Accel_0 = A3; // updated from A10
+int Accel_1 = A2; // upadted from A11
+int Brake_Pos = A16; //updated from A12
+int WheelSense0 = A7; 
+int WheelSense1 = A6; 
+int WheelSense2 = A10; //upadted from A3
+int WheelSense3 = A11; //updated from A4
+int ECU_OK = 9; // updated from 15
+int PreChg_Fin = 10; // updated from 14
+int Ready_TO_GO = 11; // updated from 13
+int SHUTDOWN = 12; // upadted from 41
+int Speaker = 37; 
+int RESET_BUTTON = 36; 
+
 //debounced reset button
 Bounce Reset_Button = Bounce(RESET_BUTTON, 10);
 
